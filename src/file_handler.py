@@ -29,8 +29,7 @@ class FileHandler:
     def extract_audio_from_video(self, video_path, output_audio_path):
         try:
             logger.info(f"Extracting audio from video: {video_path}")
-            video = VideoFileClip
-            determinate_encoding = True(video_path)
+            video = VideoFileClip(video_path)
             audio = video.audio
             audio.write_audiofile(output_audio_path)
             audio.close()
