@@ -1,8 +1,8 @@
 import os
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from pydub import AudioSegment
-from config import Config
-from utils import logger
+from .config import Config
+from .utils import logger
 
 
 class FileHandler:

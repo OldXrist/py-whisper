@@ -1,15 +1,16 @@
-from openai import OpenAI
-from config import Config
-from utils import logger, ensure_dir
+from groq import Groq
+from .config import Config
+from .utils import logger, ensure_dir
 import os
 
 
 class Transcriber:
     def __init__(self):
         config = Config()
-        self.client = OpenAI(api_key=config.OPENAI_API_KEY)
+        self.client = Groq(api_key=config.GROQ_API_KEY)
         self.model = config.WHISPER_MODEL
-        logger.info(f"OpenAI Whisper API model '{self.model}' initialized")
+        logger.info(f"Groq Whisper API model '{self.model}' initialized")
+
 
     def transcribe(self, audio_path, output_format="txt"):
         try:
@@ -18,15 +19,11 @@ class Transcriber:
             with open(audio_path, "rb") as audio_file:
                 transcription = self.client.audio.transcriptions.create(
                     model=self.model,
-                    file=audio_file,
-                    response_format=output_format
+                    file=(os.path.basename(audio_path), audio_file.read()),
+                    response_format="verbose_json"
                 )
 
-            # For txt format, transcription is a string; for srt, it's already formatted
-            if output_format == "txt":
-                transcription_text = transcription.text
-            else:  # srt
-                transcription_text = transcription
+            transcription_text = transcription.text
 
             ensure_dir(config.OUTPUT_DIR)
             output_file = os.path.join(

@@ -1,7 +1,6 @@
 import pytest
 import os
 from src.transcriber import Transcriber
-from src.config import Config
 
 
 @pytest.fixture
