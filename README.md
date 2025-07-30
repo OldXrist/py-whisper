@@ -25,3 +25,5 @@ MAX_CHUNK_SIZE_MB=19
 ```bash
 python main.py path/to/file
 ```
+
+The output will be generated in the 'transcriptions' folder
