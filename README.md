@@ -6,10 +6,10 @@ A Python application for transcribing audio and video files using Groq's whisper
 1. Clone the repository
 2. Install dependencies: `pip install -r requirements.txt`
 3. Ensure FFmpeg is installed on your system
-4. Create a `.env` file in the project root and configure it (see `.env` section below)
+4. Rename a `.env.example` file in the project root and configure it (see `.env` section below)
 
 ## .env Configuration
-Rename the `.env.dest` to `.env` with the following variables:
+Rename the `.env.example` to `.env` with the following variables:
 ```bash
 GROQ_API_KEY=your_groq_api_key_here
 WHISPER_MODEL=whisper-1
