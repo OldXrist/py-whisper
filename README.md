@@ -1,6 +1,6 @@
 # py-whisper
 
-A Python application for transcribing audio and video files using OpenAI's Whisper API.
+A Python application for transcribing audio and video files using Groq's whisper-large-v3 API.
 
 ## Installation
 1. Clone the repository
@@ -11,10 +11,17 @@ A Python application for transcribing audio and video files using OpenAI's Whisp
 ## .env Configuration
 Rename the `.env.dest` to `.env` with the following variables:
 ```bash
-OPENAI_API_KEY=your_openai_api_key_here
+GROQ_API_KEY=your_groq_api_key_here
 WHISPER_MODEL=whisper-1
 SUPPORTED_AUDIO_FORMATS=.wav,.mp3,.m4a
 SUPPORTED_VIDEO_FORMATS=.mp4,.avi,.mov
 OUTPUT_DIR=transcriptions
 LOG_DIR=logs
 LOG_FILE=transcription.log
+MAX_CHUNK_SIZE_MB=19 
+```
+
+## Usage
+```bash
+python main.py path/to/file
+```
