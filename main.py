@@ -10,7 +10,6 @@ import argparse
 def main():
     parser = argparse.ArgumentParser(description="Audio/Video Transcription using Groq Whisper API")
     parser.add_argument("file_path", help="Path to audio or video file")
-    parser.add_argument("--format", default="verbose_json", help="Output format for transcription")
     args = parser.parse_args()
 
     # Setup logging
@@ -47,14 +46,14 @@ def main():
         output_files = []
         for i, chunk_path in enumerate(audio_chunks):
             logger.info(f"Processing chunk {i + 1}/{len(audio_chunks)}")
-            transcription, output_file = transcriber.transcribe(chunk_path, args.format)
-            full_transcription += transcription + "\n" if args.format == "txt" else transcription + "\n\n"
+            transcription, output_file = transcriber.transcribe(chunk_path)
+            full_transcription += transcription + "\n"
             output_files.append(output_file)
 
         # Combine transcriptions into a single file
         combined_output = os.path.join(
             config.OUTPUT_DIR,
-            f"{os.path.basename(args.file_path).rsplit('.', 1)[0]}_combined.{args.format}"
+            f"{os.path.basename(args.file_path).rsplit('.', 1)[0]}_combined.txt"
         )
         with open(combined_output, "w", encoding="utf-8") as f:
             f.write(full_transcription.strip())
@@ -63,14 +62,21 @@ def main():
         print("\nTranscription preview:")
         print(full_transcription[:500] + "..." if len(full_transcription) > 500 else full_transcription)
 
-        # Clean up chunk files (optional)
+        # Clean up chunk files (audio and text)
         for chunk_path in audio_chunks:
             if chunk_path != audio_path:  # Don't delete the original audio
                 try:
                     os.remove(chunk_path)
-                    logger.info(f"Cleaned up chunk: {chunk_path}")
+                    logger.info(f"Cleaned up audio chunk: {chunk_path}")
                 except Exception as e:
-                    logger.warning(f"Failed to clean up chunk {chunk_path}: {str(e)}")
+                    logger.warning(f"Failed to clean up audio chunk {chunk_path}: {str(e)}")
+
+        for output_file in output_files:
+            try:
+                os.remove(output_file)
+                logger.info(f"Cleaned up text chunk: {output_file}")
+            except Exception as e:
+                logger.warning(f"Failed to clean up text chunk {output_file}: {str(e)}")
 
     except Exception as e:
         logger.error(f"Error in main execution: {str(e)}")

@@ -12,7 +12,7 @@ class Transcriber:
         logger.info(f"Groq Whisper API model '{self.model}' initialized")
 
 
-    def transcribe(self, audio_path, output_format="txt"):
+    def transcribe(self, audio_path):
         try:
             config = Config()
             logger.info(f"Starting transcription of {audio_path}")
@@ -20,7 +20,6 @@ class Transcriber:
                 transcription = self.client.audio.transcriptions.create(
                     model=self.model,
                     file=(os.path.basename(audio_path), audio_file.read()),
-                    response_format="verbose_json"
                 )
 
             transcription_text = transcription.text
@@ -28,7 +27,7 @@ class Transcriber:
             ensure_dir(config.OUTPUT_DIR)
             output_file = os.path.join(
                 config.OUTPUT_DIR,
-                f"{os.path.basename(audio_path).rsplit('.', 1)[0]}.{output_format}"
+                f"{os.path.basename(audio_path).rsplit('.', 1)[0]}.txt"
             )
 
             with open(output_file, "w", encoding="utf-8") as f:
